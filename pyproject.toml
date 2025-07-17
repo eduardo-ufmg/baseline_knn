@@ -28,10 +28,10 @@ profiling = [
     "memray",
     "scalene",
 ]
+
 benchmark = [
     "pytest-benchmark",
     "pympler",
-    "tracemalloc-tools",
 ]
 
 # Black configuration

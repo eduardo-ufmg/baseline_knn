@@ -6,8 +6,9 @@ import cProfile
 import functools
 import pstats
 import time
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable, Dict
+from typing import Any
 
 try:
     from line_profiler import LineProfiler
@@ -27,7 +28,7 @@ class SpeedProfiler:
 
     def time_function(
         self, func: Callable[..., Any], *args: Any, **kwargs: Any
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Time a function execution."""
         start_time = time.perf_counter()
         result = func(*args, **kwargs)
@@ -100,7 +101,7 @@ class SpeedProfiler:
 
     def benchmark_function(
         self, func: Callable[..., Any], iterations: int = 10, *args: Any, **kwargs: Any
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Benchmark a function over multiple iterations."""
         times = []
 

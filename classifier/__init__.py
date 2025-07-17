@@ -2,11 +2,8 @@
 
 __version__ = "0.1.0"
 __author__ = "Eduardo"
-__email__ = "your.email@example.com"
+__email__ = "eduardohbc@ufmg.com"
 
-# KNNClassifier will be imported when implemented
-# from .knn import KNNClassifier
+from .knn import KNNClassifier
 
-from typing import List
-
-__all__: List[str] = []  # Will include ["KNNClassifier"] when implemented
+__all__: list[str] = ["KNNClassifier"]

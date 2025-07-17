@@ -4,8 +4,9 @@
 import argparse
 import os
 import tracemalloc
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable, Dict
+from typing import Any
 
 import psutil
 
@@ -38,7 +39,7 @@ class MemoryProfiler:
             tracemalloc.start()
             self.tracemalloc_started = True
 
-    def get_memory_usage(self) -> Dict[str, float]:
+    def get_memory_usage(self) -> dict[str, float]:
         """Get current memory usage statistics."""
         memory_info = self.process.memory_info()
         return {
@@ -47,7 +48,7 @@ class MemoryProfiler:
             "percent": self.process.memory_percent(),
         }
 
-    def get_tracemalloc_stats(self) -> Dict[str, Any]:
+    def get_tracemalloc_stats(self) -> dict[str, Any]:
         """Get tracemalloc statistics."""
         if not self.tracemalloc_started:
             return {}
@@ -60,7 +61,7 @@ class MemoryProfiler:
 
     def profile_function(
         self, func: Callable[..., Any], *args: Any, **kwargs: Any
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Profile a function's memory usage."""
         self.start_tracemalloc()
 
@@ -91,7 +92,9 @@ def create_memory_profile_decorator() -> Callable[..., Any]:
         return profile  # type: ignore[no-any-return]
     else:
 
-        def dummy_profile(func: Callable[..., Any]) -> Callable[..., Any]:
+        def dummy_profile(
+            func: Callable[..., Any],
+        ) -> Callable[..., Any]:
             return func
 
         return dummy_profile
@@ -102,7 +105,10 @@ memory_profile = create_memory_profile_decorator()
 
 
 def run_memray_profiling(
-    func: Callable[..., Any], output_file: str, *args: Any, **kwargs: Any
+    func: Callable[..., Any],
+    output_file: str,
+    *args: Any,
+    **kwargs: Any,
 ) -> Any:
     """Run memray profiling on a function."""
     if not MEMRAY_AVAILABLE:

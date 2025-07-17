@@ -3,8 +3,9 @@
 
 import argparse
 import sys
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable, Dict
+from typing import Any
 
 # Add src to path for imports
 src_path = Path(__file__).parent.parent / "src"
@@ -25,8 +26,12 @@ class KNNProfiler:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def full_profile(
-        self, func: Callable[..., Any], name: str, *args: Any, **kwargs: Any
-    ) -> Dict[str, Any]:
+        self,
+        func: Callable[..., Any],
+        name: str,
+        *args: Any,
+        **kwargs: Any,
+    ) -> dict[str, Any]:
         """Run comprehensive profiling on a function."""
         print(f"Running comprehensive profiling for {name}...")
 
@@ -71,11 +76,11 @@ class KNNProfiler:
 
     def benchmark_comparison(
         self,
-        functions_dict: Dict[str, Callable[..., Any]],
+        functions_dict: dict[str, Callable[..., Any]],
         iterations: int = 5,
         *args: Any,
         **kwargs: Any,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Benchmark multiple functions for comparison."""
         print(f"Running benchmark comparison with {iterations} iterations...")
 
