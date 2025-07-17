@@ -7,4 +7,6 @@ __email__ = "your.email@example.com"
 # KNNClassifier will be imported when implemented
 # from .knn import KNNClassifier
 
-__all__ = []  # Will include ["KNNClassifier"] when implemented
+from typing import List
+
+__all__: List[str] = []  # Will include ["KNNClassifier"] when implemented

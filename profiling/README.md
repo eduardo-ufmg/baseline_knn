@@ -6,7 +6,7 @@ This directory contains profiling results and utilities for the baseline KNN imp
 
 ### Memory Profiling (`memory_profiler.py`)
 - **Purpose**: Profile memory usage of KNN implementations
-- **Features**: 
+- **Features**:
   - Process memory tracking (RSS, VMS)
   - Tracemalloc integration for detailed memory tracking
   - Memray support for advanced memory profiling

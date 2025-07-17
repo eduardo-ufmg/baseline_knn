@@ -1,8 +1,9 @@
 """Test file placeholder - tests will be added when implementing KNN."""
 
-import pytest
 
-
-def test_placeholder():
+def test_placeholder() -> None:
     """Placeholder test to ensure pytest runs correctly."""
-    assert True
+    # Use a simple check instead of assert
+    result = True
+    if not result:
+        raise AssertionError("Test failed")

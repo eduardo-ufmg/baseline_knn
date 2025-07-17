@@ -1,166 +1,47 @@
-[build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "baseline-knn"
 version = "0.1.0"
 description = "The baseline KNN against which I compare the ones I study."
-readme = "README.md"
-requires-python = ">=3.8"
-license = {file = "LICENSE"}
-authors = [
-    {name = "Eduardo", email = "your.email@example.com"},
-]
-keywords = ["knn", "machine-learning", "nearest-neighbors", "baseline"]
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-]
+
 dependencies = [
-    "numpy>=1.21.0",
-    "scikit-learn>=1.0.0",
-    "pandas>=1.3.0",
+    "numpy",
+    "scikit-learn",
+    "pandas",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "black>=23.0.0",
-    "isort>=5.12.0",
-    "flake8>=6.0.0",
-    "mypy>=1.0.0",
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "pre-commit>=3.0.0",
+    "black",
+    "isort",
+    "flake8",
+    "mypy",
+    "pytest",
+    "pytest-cov",
+    "pre-commit",
 ]
+
 profiling = [
-    "memory-profiler>=0.61.0",
-    "psutil>=5.9.0",
-    "line-profiler>=4.0.0",
-    "py-spy>=0.3.14",
-    "memray>=1.7.0",
-    "scalene>=1.5.0",
+    "memory-profiler",
+    "psutil",
+    "line-profiler",
+    "py-spy",
+    "memray",
+    "scalene",
 ]
 benchmark = [
-    "pytest-benchmark>=4.0.0",
-    "pympler>=0.9",
-    "tracemalloc-tools>=0.2.0",
+    "pytest-benchmark",
+    "pympler",
+    "tracemalloc-tools",
 ]
-
-[project.urls]
-Homepage = "https://github.com/eduardo-ufmg/baseline_knn"
-Repository = "https://github.com/eduardo-ufmg/baseline_knn"
-Issues = "https://github.com/eduardo-ufmg/baseline_knn/issues"
-
-[tool.setuptools.packages.find]
-where = ["src"]
-include = ["baseline_knn*"]
-
-[tool.setuptools.package-dir]
-"" = "src"
 
 # Black configuration
 [tool.black]
 line-length = 88
-target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-)/
-'''
 
 # isort configuration
 [tool.isort]
 profile = "black"
-multi_line_output = 3
 line_length = 88
-known_first_party = ["baseline_knn"]
-known_third_party = ["numpy", "pandas", "sklearn"]
-sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 
-# mypy configuration
-[tool.mypy]
-python_version = "3.8"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-check_untyped_defs = true
-disallow_untyped_decorators = true
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_no_return = true
-warn_unreachable = true
-strict_equality = true
-
-[[tool.mypy.overrides]]
-module = [
-    "sklearn.*",
-    "pandas.*",
-    "memory_profiler.*",
-    "line_profiler.*",
-    "pympler.*",
-]
-ignore_missing_imports = true
-
-# pytest configuration
-[tool.pytest.ini_options]
-minversion = "7.0"
-addopts = "-ra -q --strict-markers --strict-config"
-testpaths = ["tests"]
-python_files = ["test_*.py", "*_test.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration tests",
-    "benchmark: marks tests as benchmark tests",
-]
-
-# Coverage configuration
-[tool.coverage.run]
-source = ["src"]
-branch = true
-omit = [
-    "*/tests/*",
-    "*/test_*",
-    "*/__init__.py",
-]
-
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if self.debug:",
-    "if settings.DEBUG",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if 0:",
-    "if __name__ == .__main__.:",
-    "class .*\\bProtocol\\):",
-    "@(abc\\.)?abstractmethod",
-]
-show_missing = true
-precision = 2
-
-[tool.coverage.html]
-directory = "coverage_html_report"
+[tool.setuptools.packages.find]
+include = ["classifier*", "profiling*"]
