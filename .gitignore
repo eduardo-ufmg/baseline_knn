@@ -48,6 +48,16 @@ coverage.xml
 *.cover
 *.py.cover
 .hypothesis/
+
+# Profiling results
+profiling/results/
+*.prof
+*.bin
+*.html
+*.svg
+
+# Coverage reports
+coverage_html_report/
 .pytest_cache/
 cover/
 
