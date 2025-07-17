@@ -8,6 +8,12 @@ dependencies = [
     "scikit-learn",
     "scikit-optimize",
     "pandas",
+    "openml",
+    "ucimlrepo",
+    "pillow",
+    "scipy",
+    "joblib",
+    "tqdm",
 ]
 
 [project.optional-dependencies]
