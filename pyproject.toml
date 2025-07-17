@@ -44,5 +44,9 @@ line-length = 88
 profile = "black"
 line_length = 88
 
+# bandit configuration
+[tool.bandit.assert_used]
+skips = ['*_test.py', '*/test_*.py']
+
 [tool.setuptools.packages.find]
 include = ["classifier*", "profiling*"]

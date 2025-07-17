@@ -72,8 +72,16 @@ class BaselineKNNClassifier(BaseEstimator, ClassifierMixin):  # type: ignore[mis
 
         # NOTE: kNN is already a non-parametric model. This class makes it
         # "hyperparameter-free" from the user's perspective by automating tuning.
+
+        # Calculate the maximum safe n_neighbors based on dataset size and CV
+        # With k-fold CV, the minimum training set size is approximately
+        # (k-1)/k * n_samples
+        min_train_size = int((self.cv - 1) / self.cv * len(X))
+        # Leave some safety margin and ensure at least n_neighbors=1
+        max_neighbors = max(1, min(50, min_train_size - 1))
+
         search_spaces = {
-            "n_neighbors": Integer(1, 50),
+            "n_neighbors": Integer(1, max_neighbors),
             "weights": Categorical(["uniform", "distance"]),
             "p": Integer(1, 2),  # 1 for Manhattan distance, 2 for Euclidean
         }
