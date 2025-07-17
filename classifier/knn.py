@@ -5,8 +5,9 @@ This module implements a baseline k-Nearest Neighbors (k-NN) classifier
 that automatically tunes its hyperparameters using Bayesian Optimization.
 """
 
-import numpy as np
 import warnings
+
+import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import StratifiedKFold
 from sklearn.neighbors import KNeighborsClassifier

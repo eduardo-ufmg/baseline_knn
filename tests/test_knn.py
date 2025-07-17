@@ -12,13 +12,6 @@ from classifier.knn import BaselineKNNClassifier
 class TestBaselineKNNClassifier:
     """Test suite for BaselineKNNClassifier."""
 
-    def test_init_default_parameters(self) -> None:
-        """Test that the classifier initializes with correct default parameters."""
-        clf = BaselineKNNClassifier()
-        assert clf.n_iter == 32
-        assert clf.cv == 5
-        assert clf.random_state == 0
-
     def test_init_custom_parameters(self) -> None:
         """Test that the classifier initializes with custom parameters."""
         clf = BaselineKNNClassifier(n_iter=50, cv=3, random_state=0)

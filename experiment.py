@@ -17,24 +17,26 @@ Usage:
 import argparse
 import time
 import tracemalloc
-from pathlib import Path
 from multiprocessing import Pool, cpu_count
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import StratifiedKFold
-from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import VarianceThreshold
-from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score
+from sklearn.model_selection import StratifiedKFold
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 
 from classifier.knn import BaselineKNNClassifier
 
 
-def process_dataset(file_path: Path) -> dict | None:
+def process_dataset(file_path: Path) -> dict[str, object] | None:
     """
-    Processes a single dataset file. It runs cross-validation and collects metrics.
+    Process a single dataset file.
+
+    It runs cross-validation and collects metrics.
 
     Parameters
     ----------
@@ -42,7 +44,8 @@ def process_dataset(file_path: Path) -> dict | None:
 
     Returns
     -------
-        A dictionary containing the aggregated results for the dataset, or None on error.
+        A dictionary containing the aggregated results for the dataset,
+        or None on error.
     """
     dataset_name = file_path.stem
     print(f"🚀 Starting processing for dataset: {dataset_name}")
@@ -73,24 +76,32 @@ def process_dataset(file_path: Path) -> dict | None:
             y_train, y_test = y.iloc[train_index], y.iloc[test_index]
 
             # Define the preprocessing pipeline for this fold
-            preprocessor = Pipeline([
-                ('scaler', StandardScaler()),
-                ('variance_filter', VarianceThreshold(threshold=0.1)),
-                ('pca', PCA(n_components=0.9)) # Keep 90% of variance
-            ])
+            preprocessor = Pipeline(
+                [
+                    ("scaler", StandardScaler()),
+                    ("variance_filter", VarianceThreshold(threshold=0.1)),
+                    ("pca", PCA(n_components=0.9)),  # Keep 90% of variance
+                ]
+            )
 
             # Instantiate the classifier for this fold
             classifier = BaselineKNNClassifier()
 
             fold_count += 1
-            print(f"Processing fold {fold_count}/{n_splits} for dataset '{dataset_name}'...")
+            print(
+                f"Processing fold {fold_count}/{n_splits} "
+                f"for dataset '{dataset_name}'..."
+            )
 
             # Fit the preprocessing pipeline and transform the data
             # NOTE: We fit the preprocessor only on the training data
             X_train_processed = preprocessor.fit_transform(X_train)
             X_test_processed = preprocessor.transform(X_test)
 
-            print(f"Fold {fold_count} - Preprocessing complete for dataset '{dataset_name}'")
+            print(
+                f"Fold {fold_count} - Preprocessing complete "
+                f"for dataset '{dataset_name}'"
+            )
 
             # --- Measure Fit Time and Memory ---
             tracemalloc.start()
@@ -102,19 +113,24 @@ def process_dataset(file_path: Path) -> dict | None:
             _, fit_peak_mem = tracemalloc.get_traced_memory()
             tracemalloc.stop()
 
-            print(f"Fold {fold_count} - Classifier fit complete for dataset '{dataset_name}'")
+            print(
+                f"Fold {fold_count} - Classifier fit complete "
+                f"for dataset '{dataset_name}'"
+            )
 
             # --- Measure Predict Time and Memory ---
             tracemalloc.start()
             start_time = time.process_time()
-            
+
             y_pred = classifier.predict(X_test_processed)
-            
+
             predict_time = time.process_time() - start_time
             _, predict_peak_mem = tracemalloc.get_traced_memory()
             tracemalloc.stop()
 
-            print(f"Fold {fold_count} - Prediction complete for dataset '{dataset_name}'")
+            print(
+                f"Fold {fold_count} - Prediction complete for dataset '{dataset_name}'"
+            )
 
             # --- Calculate Accuracy ---
             accuracy = accuracy_score(y_test, y_pred)
@@ -122,23 +138,23 @@ def process_dataset(file_path: Path) -> dict | None:
             # --- Store metrics for this fold ---
             fold_accuracies.append(accuracy)
             fold_fit_times.append(fit_time)
-            fold_fit_memories.append(fit_peak_mem / 1024**2) # Convert to MB
+            fold_fit_memories.append(fit_peak_mem / 1024**2)  # Convert to MB
             fold_predict_times.append(predict_time)
-            fold_predict_memories.append(predict_peak_mem / 1024**2) # Convert to MB
+            fold_predict_memories.append(predict_peak_mem / 1024**2)  # Convert to MB
 
         # 5. Aggregate results after all folds are done
         results = {
-            'dataset': dataset_name,
-            'accuracy_mean': float(f"{np.mean(fold_accuracies):.3g}"),
-            'accuracy_std': float(f"{np.std(fold_accuracies):.1g}"),
-            'fit_time_cpu_mean': float(f"{np.mean(fold_fit_times):.3g}"),
-            'fit_time_cpu_std': float(f"{np.std(fold_fit_times):.1g}"),
-            'fit_mem_peak_mean_mb': float(f"{np.mean(fold_fit_memories):.3g}"),
-            'fit_mem_peak_std_mb': float(f"{np.std(fold_fit_memories):.1g}"),
-            'predict_time_cpu_mean': float(f"{np.mean(fold_predict_times):.3g}"),
-            'predict_time_cpu_std': float(f"{np.std(fold_predict_times):.1g}"),
-            'predict_mem_peak_mean_mb': float(f"{np.mean(fold_predict_memories):.3g}"),
-            'predict_mem_peak_std_mb': float(f"{np.std(fold_predict_memories):.1g}")
+            "dataset": dataset_name,
+            "accuracy_mean": float(f"{np.mean(fold_accuracies):.3g}"),
+            "accuracy_std": float(f"{np.std(fold_accuracies):.1g}"),
+            "fit_time_cpu_mean": float(f"{np.mean(fold_fit_times):.3g}"),
+            "fit_time_cpu_std": float(f"{np.std(fold_fit_times):.1g}"),
+            "fit_mem_peak_mean_mb": float(f"{np.mean(fold_fit_memories):.3g}"),
+            "fit_mem_peak_std_mb": float(f"{np.std(fold_fit_memories):.1g}"),
+            "predict_time_cpu_mean": float(f"{np.mean(fold_predict_times):.3g}"),
+            "predict_time_cpu_std": float(f"{np.std(fold_predict_times):.1g}"),
+            "predict_mem_peak_mean_mb": float(f"{np.mean(fold_predict_memories):.3g}"),
+            "predict_mem_peak_std_mb": float(f"{np.std(fold_predict_memories):.1g}"),
         }
         print(f"✅ Finished processing for dataset: {dataset_name}")
         return results
@@ -148,30 +164,36 @@ def process_dataset(file_path: Path) -> dict | None:
         return None
 
 
-def main():
-    """Main function to parse arguments and run the parallel processing."""
-    parser = argparse.ArgumentParser(description="Run cross-validation experiments in parallel.")
-    parser.add_argument("datasets_folder", type=str, help="Path to the folder containing CSV datasets.")
-    parser.add_argument("output_csv", type=str, help="Path to save the output results CSV file.")
+def main() -> None:
+    """Parse arguments and run the parallel processing."""
+    parser = argparse.ArgumentParser(
+        description="Run cross-validation experiments in parallel."
+    )
+    parser.add_argument(
+        "datasets_folder", type=str, help="Path to the folder containing CSV datasets."
+    )
+    parser.add_argument(
+        "output_csv", type=str, help="Path to save the output results CSV file."
+    )
     args = parser.parse_args()
 
     # Find all relevant dataset files
     input_path = Path(args.datasets_folder)
     output_path = Path(args.output_csv)
-    
+
     if not input_path.is_dir():
         print(f"Error: Input path '{input_path}' is not a valid directory.")
         return
 
     # Get all .csv files that do not start with an underscore
-    csv_files = [p for p in input_path.glob('*.csv') if not p.name.startswith('_')]
+    csv_files = [p for p in input_path.glob("*.csv") if not p.name.startswith("_")]
 
     if not csv_files:
         print(f"No valid CSV datasets found in '{input_path}'.")
         return
 
     print(f"Found {len(csv_files)} datasets to process.")
-    
+
     # Use a process pool to run experiments in parallel
     # Uses all available CPU cores by default
     num_processes = cpu_count()
@@ -186,17 +208,23 @@ def main():
     if not valid_results:
         print("No datasets were successfully processed.")
         return
-        
+
     # Convert results to a DataFrame and save to CSV
     results_df = pd.DataFrame(valid_results)
-    
+
     # Reorder columns for clarity
     column_order = [
-        'dataset', 'accuracy_mean', 'accuracy_std',
-        'fit_time_cpu_mean', 'fit_time_cpu_std', 
-        'predict_time_cpu_mean', 'predict_time_cpu_std',
-        'fit_mem_peak_mean_mb', 'fit_mem_peak_std_mb',
-        'predict_mem_peak_mean_mb', 'predict_mem_peak_std_mb'
+        "dataset",
+        "accuracy_mean",
+        "accuracy_std",
+        "fit_time_cpu_mean",
+        "fit_time_cpu_std",
+        "predict_time_cpu_mean",
+        "predict_time_cpu_std",
+        "fit_mem_peak_mean_mb",
+        "fit_mem_peak_std_mb",
+        "predict_mem_peak_mean_mb",
+        "predict_mem_peak_std_mb",
     ]
     results_df = results_df[column_order]
 
