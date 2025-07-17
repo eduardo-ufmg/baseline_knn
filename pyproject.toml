@@ -6,6 +6,7 @@ description = "The baseline KNN against which I compare the ones I study."
 dependencies = [
     "numpy",
     "scikit-learn",
+    "scikit-optimize",
     "pandas",
 ]
 
