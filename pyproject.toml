@@ -27,20 +27,6 @@ dev = [
     "pre-commit",
 ]
 
-profiling = [
-    "memory-profiler",
-    "psutil",
-    "line-profiler",
-    "py-spy",
-    "memray",
-    "scalene",
-]
-
-benchmark = [
-    "pytest-benchmark",
-    "pympler",
-]
-
 # Black configuration
 [tool.black]
 line-length = 88

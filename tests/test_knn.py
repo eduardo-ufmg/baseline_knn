@@ -21,10 +21,10 @@ class TestBaselineKNNClassifier:
 
     def test_init_custom_parameters(self) -> None:
         """Test that the classifier initializes with custom parameters."""
-        clf = BaselineKNNClassifier(n_iter=50, cv=3, random_state=42)
+        clf = BaselineKNNClassifier(n_iter=50, cv=3, random_state=0)
         assert clf.n_iter == 50
         assert clf.cv == 3
-        assert clf.random_state == 42
+        assert clf.random_state == 0
 
     def test_fit_basic(self, sample_data: tuple[np.ndarray, np.ndarray]) -> None:
         """Test basic fitting functionality."""
@@ -92,7 +92,7 @@ class TestBaselineKNNClassifier:
         """Test predict functionality after fitting."""
         X, y = sample_data
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.3, random_state=42
+            X, y, test_size=0.3, random_state=0
         )
 
         clf = BaselineKNNClassifier(n_iter=5)
@@ -117,7 +117,7 @@ class TestBaselineKNNClassifier:
         """Test predict_proba functionality after fitting."""
         X, y = sample_data
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.3, random_state=42
+            X, y, test_size=0.3, random_state=0
         )
 
         clf = BaselineKNNClassifier(n_iter=5)
@@ -207,8 +207,8 @@ class TestBaselineKNNClassifier:
         X, y = sample_data
 
         # Fit two classifiers with same random state
-        clf1 = BaselineKNNClassifier(n_iter=5, random_state=42)
-        clf2 = BaselineKNNClassifier(n_iter=5, random_state=42)
+        clf1 = BaselineKNNClassifier(n_iter=5, random_state=0)
+        clf2 = BaselineKNNClassifier(n_iter=5, random_state=0)
 
         clf1.fit(X, y)
         clf2.fit(X, y)
@@ -356,7 +356,7 @@ class TestBaselineKNNClassifier:
         """Test that the classifier achieves reasonable performance on sample data."""
         X, y = sample_data
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.3, random_state=42
+            X, y, test_size=0.3, random_state=0
         )
 
         clf = BaselineKNNClassifier(n_iter=10)

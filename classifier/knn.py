@@ -6,6 +6,7 @@ that automatically tunes its hyperparameters using Bayesian Optimization.
 """
 
 import numpy as np
+import warnings
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import StratifiedKFold
 from sklearn.neighbors import KNeighborsClassifier
@@ -27,11 +28,11 @@ class BaselineKNNClassifier(BaseEstimator, ClassifierMixin):  # type: ignore[mis
 
     Parameters
     ----------
-    n_iter : int, default=32
+    n_iter : int, default=8
         The number of parameter settings that are sampled. This is the number
         of iterations for the Bayesian Optimization search.
 
-    cv : int, default=5
+    cv : int, default=3
         The number of folds to use for cross-validation during the
         optimization process.
 
@@ -40,7 +41,7 @@ class BaselineKNNClassifier(BaseEstimator, ClassifierMixin):  # type: ignore[mis
         optimization search.
     """
 
-    def __init__(self, n_iter: int = 32, cv: int = 5, random_state: int = 0) -> None:
+    def __init__(self, n_iter: int = 8, cv: int = 3, random_state: int = 0) -> None:
         """Initialize the BaselineKNNClassifier with hyperparameter search settings."""
         self.n_iter = n_iter
         self.cv = cv
@@ -102,8 +103,10 @@ class BaselineKNNClassifier(BaseEstimator, ClassifierMixin):  # type: ignore[mis
             verbose=0,
         )
 
-        # 4. Run the optimization on the training data
-        opt.fit(X, y)
+        # 4. Run the optimization on the training data, suppressing user warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=UserWarning)
+            opt.fit(X, y)
 
         # 5. Store the best found estimator and its parameters
         self.best_estimator_ = opt.best_estimator_
